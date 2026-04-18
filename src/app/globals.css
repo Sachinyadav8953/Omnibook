@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #fdfbf7;
+    --foreground: #1c1c1c;
+
+    --primary: #183e29;
+    --primary-foreground: #ffffff;
+
+    --secondary: #f0eee5;
+    --secondary-foreground: #2d2d2d;
+
+    --accent: #c4a962;
+    --accent-foreground: #ffffff;
+    
+    --card: #ffffff;
+    --card-foreground: #1c1c1c;
+    --card-border: #eae8df;
+  }
+
+  * {
+    @apply border-zinc-200;
+  }
+
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6, .font-serif {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer components {
+  /* Layout Classes */
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-title {
+    @apply text-4xl md:text-5xl font-bold tracking-tight text-[var(--foreground)];
+  }
+
+  .section-subtitle {
+    @apply text-lg text-zinc-600 mt-3 font-sans;
+  }
+
+  /* Button Classes */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300
+    bg-[var(--primary)] text-white hover:bg-[#122e1f] active:scale-[0.98]
+    px-6 py-2.5 sm:px-8 sm:py-3 shadow-md hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300
+    bg-transparent text-[var(--foreground)] border border-[var(--primary)] 
+    hover:bg-[var(--primary)] hover:text-white active:scale-[0.98]
+    px-6 py-2.5 sm:px-8 sm:py-3;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300
+    hover:bg-zinc-100 text-zinc-700
+    px-4 py-2;
+  }
+  
+  .btn-white {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300
+    bg-white text-[var(--primary)] hover:bg-zinc-100 active:scale-[0.98]
+    px-6 py-2.5 sm:px-8 sm:py-3 shadow-md hover:shadow-xl;
+  }
+  
+  .btn-outline-white {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300
+    bg-transparent text-white border border-white/40
+    hover:border-white hover:bg-white/10 active:scale-[0.98]
+    px-6 py-2.5 sm:px-8 sm:py-3 backdrop-blur-sm;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300
+    bg-red-600 text-white hover:bg-red-700 active:scale-[0.98]
+    px-6 py-2.5 sm:px-8 sm:py-3 shadow-md hover:shadow-xl text-sm;
+  }
+
+  /* Form Elements */
+  .input-field {
+    @apply w-full rounded-full border border-[var(--card-border)] bg-white px-5 py-3 
+    text-sm text-[var(--foreground)] outline-none transition-all duration-300
+    focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)];
+  }
+
+  /* Card Elements */
+  .card {
+    @apply rounded-2xl bg-[var(--card)] border border-[var(--card-border)] text-[var(--card-foreground)]
+    transition-all duration-300 shadow-sm hover:shadow-md;
+  }
+
+  /* Status Chips */
+  .chip {
+    @apply inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold
+    bg-[var(--secondary)] text-[var(--secondary-foreground)];
+  }
+
+  .chip-accent {
+    @apply bg-[var(--primary)] text-white;
+  }
+
+  /* Custom Seat Styles for the Movie detail portion */
+  .seat {
+    @apply w-8 h-8 rounded-t-lg rounded-b-md flex items-center justify-center text-[10px] font-bold 
+    transition-all duration-200 border-b-4 border-[var(--card-border)];
+  }
+
+  .seat-available {
+    @apply bg-zinc-100 text-zinc-500 hover:bg-zinc-200 cursor-pointer;
+  }
+
+  .seat-premium {
+    @apply bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100;
+  }
+
+  .seat-vip {
+    @apply bg-indigo-50 text-indigo-600 border-indigo-200 hover:bg-indigo-100;
+  }
+
+  .seat-selected {
+    @apply bg-[var(--primary)] text-white border-[#122e1f] scale-110 !font-bold shadow-md;
+  }
+
+  .seat-booked {
+    @apply bg-zinc-200 text-zinc-400 border-zinc-300 cursor-not-allowed opacity-60;
+  }
+
+  .seat-locked {
+    @apply bg-orange-100 text-orange-400 border-orange-200 cursor-not-allowed;
+  }
+}

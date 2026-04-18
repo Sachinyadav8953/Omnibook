@@ -1,0 +1,242 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  avatar        String?
+  phone         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  bookings      Booking[]
+  reviews       Review[]
+}
+
+model City {
+  id        String    @id @default(cuid())
+  name      String
+  state     String
+  country   String    @default("India")
+  imageUrl  String?
+  theatres  Theatre[]
+  hotels    Hotel[]
+}
+
+model Movie {
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  genre       String[]
+  duration    Int
+  language    String
+  rating      Float      @default(0)
+  certificate String     @default("U/A")
+  posterUrl   String?
+  bannerUrl   String?
+  releaseDate DateTime
+  cast        String[]
+  director    String
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  showtimes   Showtime[]
+}
+
+model Theatre {
+  id        String   @id @default(cuid())
+  name      String
+  cityId    String
+  address   String
+  imageUrl  String?
+  city      City     @relation(fields: [cityId], references: [id])
+  screens   Screen[]
+}
+
+model Screen {
+  id         String     @id @default(cuid())
+  name       String
+  theatreId  String
+  rows       Int
+  columns    Int
+  theatre    Theatre    @relation(fields: [theatreId], references: [id])
+  seats      Seat[]
+  showtimes  Showtime[]
+}
+
+model Seat {
+  id        String       @id @default(cuid())
+  screenId  String
+  row       String
+  number    Int
+  type      SeatType     @default(REGULAR)
+  screen    Screen       @relation(fields: [screenId], references: [id])
+  tickets   SeatTicket[]
+
+  @@unique([screenId, row, number])
+}
+
+model Showtime {
+  id           String              @id @default(cuid())
+  movieId      String
+  screenId     String
+  startTime    DateTime
+  endTime      DateTime
+  basePrice    Float
+  premiumPrice Float
+  vipPrice     Float
+  isActive     Boolean             @default(true)
+  movie        Movie               @relation(fields: [movieId], references: [id])
+  screen       Screen              @relation(fields: [screenId], references: [id])
+  bookings     MovieBookingDetail[]
+  seatStatuses ShowtimeSeatStatus[]
+}
+
+model ShowtimeSeatStatus {
+  id         String     @id @default(cuid())
+  showtimeId String
+  seatId     String
+  status     SeatStatus @default(AVAILABLE)
+  lockedBy   String?
+  lockedAt   DateTime?
+  showtime   Showtime   @relation(fields: [showtimeId], references: [id])
+
+  @@unique([showtimeId, seatId])
+}
+
+model Hotel {
+  id          String     @id @default(cuid())
+  name        String
+  cityId      String
+  address     String
+  description String
+  starRating  Int        @default(3)
+  amenities   String[]
+  imageUrl    String?
+  images      String[]
+  latitude    Float?
+  longitude   Float?
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  city        City       @relation(fields: [cityId], references: [id])
+  roomTypes   RoomType[]
+  reviews     Review[]
+}
+
+model RoomType {
+  id            String               @id @default(cuid())
+  hotelId       String
+  name          String
+  description   String
+  pricePerNight Float
+  totalRooms    Int
+  maxGuests     Int                  @default(2)
+  amenities     String[]
+  imageUrl      String?
+  hotel         Hotel                @relation(fields: [hotelId], references: [id])
+  bookings      HotelBookingDetail[]
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  userId      String
+  type        BookingType
+  status      BookingStatus @default(PENDING)
+  totalAmount Float
+  lockedUntil DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  user        User          @relation(fields: [userId], references: [id])
+  payment     Payment?
+  movieDetail MovieBookingDetail?
+  hotelDetail HotelBookingDetail?
+}
+
+model MovieBookingDetail {
+  id         String       @id @default(cuid())
+  bookingId  String       @unique
+  showtimeId String
+  booking    Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  showtime   Showtime     @relation(fields: [showtimeId], references: [id])
+  seats      SeatTicket[]
+}
+
+model SeatTicket {
+  id                   String             @id @default(cuid())
+  movieBookingDetailId String
+  seatId               String
+  price                Float
+  movieBookingDetail   MovieBookingDetail @relation(fields: [movieBookingDetailId], references: [id], onDelete: Cascade)
+  seat                 Seat               @relation(fields: [seatId], references: [id])
+}
+
+model HotelBookingDetail {
+  id         String   @id @default(cuid())
+  bookingId  String   @unique
+  roomTypeId String
+  checkIn    DateTime
+  checkOut   DateTime
+  rooms      Int      @default(1)
+  guests     Int      @default(1)
+  booking    Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  roomType   RoomType @relation(fields: [roomTypeId], references: [id])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  bookingId     String        @unique
+  amount        Float
+  status        PaymentStatus @default(PENDING)
+  method        String        @default("card")
+  transactionId String?
+  createdAt     DateTime      @default(now())
+  booking       Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  hotelId   String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  hotel     Hotel    @relation(fields: [hotelId], references: [id])
+}
+
+enum SeatType {
+  REGULAR
+  PREMIUM
+  VIP
+}
+
+enum SeatStatus {
+  AVAILABLE
+  LOCKED
+  BOOKED
+}
+
+enum BookingType {
+  MOVIE
+  HOTEL
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
