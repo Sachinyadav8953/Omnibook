@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { acquireLock } from "@/lib/redis";
 
 export async function POST(req: NextRequest) {
   try {
@@ -39,21 +38,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Room type not found" }, { status: 404 });
     }
 
-    const lockKey = `hotel:${roomTypeId}:${checkIn}:${checkOut}`;
-    const locked = await acquireLock(lockKey, session.userId);
-
-    if (!locked) {
-      return NextResponse.json(
-        { error: "Someone else is currently booking this room type. Please try again." },
-        { status: 409 }
-      );
-    }
-
     const bookedRooms = await prisma.hotelBookingDetail.aggregate({
       where: {
         roomTypeId,
         booking: {
-          status: { in: ["CONFIRMED", "PENDING"] },
+          OR: [
+            { status: "CONFIRMED" },
+            { 
+              status: "PENDING",
+              lockedUntil: { gt: new Date() }
+            }
+          ]
         },
         checkIn: { lt: checkOutDate },
         checkOut: { gt: checkInDate },

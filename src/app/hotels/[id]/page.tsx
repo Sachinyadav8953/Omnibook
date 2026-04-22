@@ -95,6 +95,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
   const [error, setError] = useState("");
 
   useEffect(() => {
+    
     setLoading(true);
     fetch(`/api/hotels/${id}?checkIn=${checkIn}&checkOut=${checkOut}`)
       .then((r) => r.json())
@@ -167,7 +168,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
   if (loading) {
     return (
       <div className="flex items-center justify-center py-32">
-        <Loader2 size={32} className="animate-spin text-indigo-400" />
+        <Loader2 size={32} className="animate-spin text-[#c4a962]" />
       </div>
     );
   }
@@ -181,14 +182,14 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="relative h-[300px] md:h-[400px] overflow-hidden">
+    <div className="min-h-screen -mt-20">
+      <div className="relative h-[400px] md:h-[500px] overflow-hidden">
         {hotel.imageUrl ? (
           <img src={hotel.imageUrl} alt={hotel.name} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-emerald-900 to-teal-900" />
+          <div className="w-full h-full bg-gradient-to-br from-[#183e29] to-[#0f281a]" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#fdfbf7] via-[#fdfbf7]/80 to-transparent" />
 
         <div className="absolute bottom-0 left-0 right-0 page-container pb-8">
           <div className="flex items-center gap-2 mb-3">
@@ -203,7 +204,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
           </p>
           {hotel.avgRating > 0 && (
             <div className="flex items-center gap-2 mt-3">
-              <span className="px-3 py-1 rounded-lg bg-indigo-500/15 text-indigo-400 text-sm font-semibold">
+              <span className="px-3 py-1 rounded-lg bg-[#c4a962]/10 text-[#183e29] text-sm font-semibold">
                 {hotel.avgRating}
               </span>
               <span className="text-sm text-zinc-400">
@@ -227,7 +228,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {hotel.amenities.map((a) => (
                   <div key={a} className="flex items-center gap-3 text-sm text-zinc-400">
-                    <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-indigo-400">
+                    <div className="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center text-[#183e29]">
                       {amenityIcons[a] || <Star size={14} />}
                     </div>
                     {a}
@@ -281,7 +282,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                     key={rt.id}
                     className={`card p-5 cursor-pointer transition-all ${
                       selectedRoom?.id === rt.id
-                        ? "!border-indigo-500/50 !bg-indigo-500/5"
+                        ? "!border-[#c4a962]/50 !bg-[#c4a962]/5"
                         : ""
                     }`}
                     onClick={() => setSelectedRoom(rt)}
@@ -300,7 +301,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                             <p className="text-xs text-zinc-500 mt-1">{rt.description}</p>
                           </div>
                           <div className="text-right">
-                            <p className="text-xl font-bold text-indigo-400">
+                            <p className="text-xl font-bold text-[#183e29]">
                               {formatCurrency(rt.pricePerNight)}
                             </p>
                             <p className="text-xs text-zinc-500">per night</p>
@@ -340,7 +341,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                   {hotel.reviews.map((review) => (
                     <div key={review.id} className="card p-5">
                       <div className="flex items-center gap-3 mb-2">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#183e29] to-[#0f281a] flex items-center justify-center text-white text-xs font-bold">
                           {review.user.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
@@ -373,36 +374,36 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                   <h3 className="font-semibold mb-4">Booking Summary</h3>
 
                   <div className="space-y-3 text-sm">
-                    <div className="flex justify-between text-zinc-400">
+                    <div className="flex justify-between text-zinc-500">
                       <span>Hotel</span>
-                      <span className="text-zinc-200 font-medium text-right text-xs max-w-[150px]">
+                      <span className="text-zinc-900 font-medium text-right text-xs max-w-[150px]">
                         {hotel.name}
                       </span>
                     </div>
-                    <div className="flex justify-between text-zinc-400">
+                    <div className="flex justify-between text-zinc-500">
                       <span>Room</span>
-                      <span className="text-zinc-200">{selectedRoom.name}</span>
+                      <span className="text-zinc-900">{selectedRoom.name}</span>
                     </div>
-                    <div className="flex justify-between text-zinc-400">
+                    <div className="flex justify-between text-zinc-500">
                       <span>Check-in</span>
-                      <span className="text-zinc-200">{checkIn}</span>
+                      <span className="text-zinc-900">{checkIn}</span>
                     </div>
-                    <div className="flex justify-between text-zinc-400">
+                    <div className="flex justify-between text-zinc-500">
                       <span>Check-out</span>
-                      <span className="text-zinc-200">{checkOut}</span>
+                      <span className="text-zinc-900">{checkOut}</span>
                     </div>
-                    <div className="flex justify-between text-zinc-400">
+                    <div className="flex justify-between text-zinc-500">
                       <span>Nights</span>
-                      <span className="text-zinc-200">{nights}</span>
+                      <span className="text-zinc-900">{nights}</span>
                     </div>
-
-                    <div className="border-t border-zinc-800 pt-3">
+ 
+                    <div className="border-t border-zinc-200 pt-3">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-zinc-400">Rooms</span>
                         <div className="flex items-center gap-3">
                           <button
                             onClick={() => setRooms(Math.max(1, rooms - 1))}
-                            className="w-7 h-7 rounded-lg bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 transition"
+                            className="w-7 h-7 rounded-lg bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition"
                           >
                             <Minus size={12} />
                           </button>
@@ -413,7 +414,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                                 Math.min(selectedRoom.availableRooms || selectedRoom.totalRooms, rooms + 1)
                               )
                             }
-                            className="w-7 h-7 rounded-lg bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 transition"
+                            className="w-7 h-7 rounded-lg bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition"
                           >
                             <Plus size={12} />
                           </button>
@@ -424,7 +425,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                         <div className="flex items-center gap-3">
                           <button
                             onClick={() => setGuests(Math.max(1, guests - 1))}
-                            className="w-7 h-7 rounded-lg bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 transition"
+                            className="w-7 h-7 rounded-lg bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition"
                           >
                             <Minus size={12} />
                           </button>
@@ -433,7 +434,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                             onClick={() =>
                               setGuests(Math.min(selectedRoom.maxGuests * rooms, guests + 1))
                             }
-                            className="w-7 h-7 rounded-lg bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 transition"
+                            className="w-7 h-7 rounded-lg bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition"
                           >
                             <Plus size={12} />
                           </button>
@@ -441,7 +442,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                       </div>
                     </div>
 
-                    <div className="border-t border-zinc-800 pt-3 space-y-1">
+                    <div className="border-t border-zinc-200 pt-3 space-y-1">
                       <div className="flex justify-between text-xs text-zinc-500">
                         <span>
                           {formatCurrency(selectedRoom.pricePerNight)} x {nights} night{nights > 1 ? "s" : ""} x {rooms} room{rooms > 1 ? "s" : ""}
@@ -449,9 +450,9 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                       </div>
                     </div>
 
-                    <div className="border-t border-zinc-800 pt-3 flex justify-between font-semibold">
+                    <div className="border-t border-zinc-200 pt-3 flex justify-between font-semibold">
                       <span>Total</span>
-                      <span className="text-indigo-400 text-lg">
+                      <span className="text-[#183e29] text-lg">
                         {formatCurrency(totalAmount)}
                       </span>
                     </div>

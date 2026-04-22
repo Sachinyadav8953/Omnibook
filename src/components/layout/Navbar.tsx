@@ -27,29 +27,28 @@ export default function Navbar() {
       await fetch("/api/auth/logout", { method: "POST" });
       clearUser();
     } catch {
-      // noop
+      
     }
   };
 
-  // Determine navbar background logic
+  
   const navClass = isHome && !scrolled
     ? "bg-transparent text-white border-transparent"
-    : "bg-[#183e29] text-white shadow-md border-[#122e1f]";
+    : scrolled
+      ? "bg-white/80 backdrop-blur-md text-[#183e29] shadow-sm border-white/20"
+      : "bg-[#183e29] text-white shadow-md border-[#122e1f]";
 
   return (
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${navClass}`}
       >
-        <div className="page-container h-20 flex items-center justify-between">
+        <div className="page-container h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span className="font-serif text-2xl font-bold italic tracking-tight">
               Omni<span className="text-[#c4a962]">Book.</span>
             </span>
-          </Link>
-
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+          </Link><div className="hidden md:flex items-center gap-8 text-sm font-medium">
             <Link href="/movies" className="hover:text-[#c4a962] transition-colors">Movies</Link>
             <Link href="/hotels" className="hover:text-[#c4a962] transition-colors">Hotels</Link>
             <Link href="/search" className="hover:text-[#c4a962] transition-colors">Search</Link>
@@ -81,20 +80,14 @@ export default function Navbar() {
                 </Link>
               </>
             )}
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <button
+          </div><button
             onClick={() => setMobileMenuOpen(true)}
             className="md:hidden p-2 -mr-2 text-current"
           >
             <Menu size={24} />
           </button>
         </div>
-      </nav>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
+      </nav><AnimatePresence>
         {mobileMenuOpen && (
           <>
             <motion.div

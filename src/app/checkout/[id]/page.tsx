@@ -114,11 +114,11 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
         >
-          <div className="w-16 h-16 rounded-full bg-emerald-500/15 flex items-center justify-center mx-auto mb-6">
-            <CheckCircle2 size={32} className="text-emerald-400" />
+          <div className="w-16 h-16 rounded-full bg-[#183e29]/10 flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 size={32} className="text-[#183e29]" />
           </div>
           <h1 className="text-2xl font-bold mb-2">Booking Confirmed!</h1>
-          <p className="text-zinc-400 mb-6">
+          <p className="text-zinc-600 mb-6">
             Your booking has been confirmed. Check your dashboard for details.
           </p>
           <div className="flex gap-3 justify-center">
@@ -146,7 +146,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
             <AlertTriangle size={32} className="text-red-400" />
           </div>
           <h1 className="text-2xl font-bold mb-2">Session Expired</h1>
-          <p className="text-zinc-400 mb-6">
+          <p className="text-zinc-600 mb-6">
             Your 10-minute reservation window has expired. The seats/rooms have been released.
           </p>
           <button onClick={() => router.push("/")} className="btn-primary">
@@ -165,11 +165,11 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
         >
-          <div className="w-16 h-16 rounded-full bg-zinc-500/15 flex items-center justify-center mx-auto mb-6">
-            <X size={32} className="text-zinc-400" />
+          <div className="w-16 h-16 rounded-full bg-zinc-100 flex items-center justify-center mx-auto mb-6">
+            <X size={32} className="text-zinc-500" />
           </div>
           <h1 className="text-2xl font-bold mb-2">Booking Cancelled</h1>
-          <p className="text-zinc-400 mb-6">Your reservation has been cancelled and inventory released.</p>
+          <p className="text-zinc-600 mb-6">Your reservation has been cancelled and inventory released.</p>
           <button onClick={() => router.push("/")} className="btn-primary">
             Go Home
           </button>
@@ -207,11 +207,11 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
       {item && (
         <div className="card p-6 mb-6">
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-[#183e29]/10 flex items-center justify-center flex-shrink-0">
               {item.type === "MOVIE" ? (
-                <Ticket size={20} className="text-indigo-400" />
+                <Ticket size={20} className="text-[#183e29]" />
               ) : (
-                <Hotel size={20} className="text-emerald-400" />
+                <Hotel size={20} className="text-[#c4a962]" />
               )}
             </div>
             <div className="flex-1">
@@ -222,7 +222,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
               {item.type === "MOVIE" && (
                 <div className="space-y-2">
                   <h3 className="font-semibold text-lg">{item.movieTitle}</h3>
-                  <div className="grid grid-cols-2 gap-2 text-sm text-zinc-400">
+                  <div className="grid grid-cols-2 gap-2 text-sm text-zinc-600">
                     <div>
                       <span className="text-zinc-500">Theatre:</span>{" "}
                       {item.theatreName}
@@ -253,8 +253,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
               {item.type === "HOTEL" && (
                 <div className="space-y-2">
                   <h3 className="font-semibold text-lg">{item.hotelName}</h3>
-                  <p className="text-sm text-zinc-400">{item.roomTypeName}</p>
-                  <div className="grid grid-cols-2 gap-2 text-sm text-zinc-400">
+                  <p className="text-sm text-zinc-600">{item.roomTypeName}</p>
+                  <div className="grid grid-cols-2 gap-2 text-sm text-zinc-600">
                     <div>
                       <span className="text-zinc-500">Check-in:</span>{" "}
                       {formatDate(item.checkIn)}
@@ -275,9 +275,9 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
             </div>
           </div>
 
-          <div className="border-t border-zinc-800 mt-5 pt-4 flex justify-between items-center">
-            <span className="text-zinc-400">Total Amount</span>
-            <span className="text-2xl font-bold text-indigo-400">
+          <div className="border-t border-zinc-200 mt-5 pt-4 flex justify-between items-center">
+            <span className="text-zinc-600">Total Amount</span>
+            <span className="text-2xl font-bold text-[#183e29]">
               {formatCurrency(item.totalAmount)}
             </span>
           </div>
@@ -286,21 +286,21 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
 
       <div className="card p-6 mb-6">
         <h2 className="font-semibold mb-4 flex items-center gap-2">
-          <CreditCard size={18} className="text-indigo-400" />
+          <CreditCard size={18} className="text-[#c4a962]" />
           Payment Method
         </h2>
         <div className="space-y-3">
-          <label className="flex items-center gap-3 p-4 rounded-xl border border-indigo-500/30 bg-indigo-500/5 cursor-pointer">
-            <input type="radio" name="payment" defaultChecked className="accent-indigo-500" />
-            <CreditCard size={18} className="text-zinc-400" />
+          <label className="flex items-center gap-3 p-4 rounded-xl border border-[#c4a962]/50 bg-[#c4a962]/5 cursor-pointer">
+            <input type="radio" name="payment" defaultChecked className="accent-[#c4a962]" />
+            <CreditCard size={18} className="text-[#c4a962]" />
             <div>
               <p className="text-sm font-medium">Credit / Debit Card</p>
               <p className="text-xs text-zinc-500">Mock payment — no real charge</p>
             </div>
           </label>
-          <label className="flex items-center gap-3 p-4 rounded-xl border border-zinc-700 cursor-pointer hover:border-zinc-600 transition">
-            <input type="radio" name="payment" className="accent-indigo-500" />
-            <Shield size={18} className="text-zinc-400" />
+          <label className="flex items-center gap-3 p-4 rounded-xl border border-zinc-200 cursor-pointer hover:border-zinc-300 transition bg-white">
+            <input type="radio" name="payment" className="accent-[#c4a962]" />
+            <Shield size={18} className="text-zinc-500" />
             <div>
               <p className="text-sm font-medium">UPI</p>
               <p className="text-xs text-zinc-500">Pay via UPI (simulated)</p>

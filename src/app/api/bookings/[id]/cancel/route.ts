@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { releaseMultiLocks, releaseLock } from "@/lib/redis";
 
 export async function POST(
   req: NextRequest,
@@ -22,6 +21,7 @@ export async function POST(
           include: { seats: true },
         },
         hotelDetail: true,
+        payment: true,
       },
     });
 
@@ -62,18 +62,6 @@ export async function POST(
         });
       }
     });
-
-    if (booking.type === "MOVIE" && booking.movieDetail) {
-      const lockKeys = booking.movieDetail.seats.map(
-        (s) => `seat:${booking.movieDetail!.showtimeId}:${s.seatId}`
-      );
-      await releaseMultiLocks(lockKeys, session.userId);
-    }
-
-    if (booking.type === "HOTEL" && booking.hotelDetail) {
-      const lockKey = `hotel:${booking.hotelDetail.roomTypeId}:${booking.hotelDetail.checkIn.toISOString().split("T")[0]}:${booking.hotelDetail.checkOut.toISOString().split("T")[0]}`;
-      await releaseLock(lockKey, session.userId);
-    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

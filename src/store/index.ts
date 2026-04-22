@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+
+
 export interface CartSeat {
   seatId: string;
   row: string;
@@ -59,12 +61,15 @@ export const useCartStore = create<CartState>((set) => ({
   clearCart: () => set({ item: null, bookingId: null, lockedUntil: null }),
 }));
 
+
+
 interface AuthState {
   user: { id: string; name: string; email: string; avatar?: string } | null;
   isLoading: boolean;
   setUser: (user: AuthState["user"]) => void;
   setLoading: (loading: boolean) => void;
   logout: () => void;
+  clearUser: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -73,7 +78,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   setUser: (user) => set({ user, isLoading: false }),
   setLoading: (isLoading) => set({ isLoading }),
   logout: () => set({ user: null, isLoading: false }),
+  clearUser: () => set({ user: null, isLoading: false }),
 }));
+
+
 
 interface SearchState {
   query: string;
@@ -87,4 +95,37 @@ export const useSearchStore = create<SearchState>((set) => ({
   city: "",
   setQuery: (query) => set({ query }),
   setCity: (city) => set({ city }),
+}));
+
+
+
+interface LocationState {
+  city: string;
+  lat: number | null;
+  lng: number | null;
+  setCity: (city: string) => void;
+  setCoords: (lat: number, lng: number) => void;
+  openPicker: boolean;
+  setOpenPicker: (open: boolean) => void;
+}
+
+
+function getStoredCity(): string {
+  if (typeof window === "undefined") return "";
+  return localStorage.getItem("omnibook_city") || "";
+}
+
+export const useLocationStore = create<LocationState>((set) => ({
+  city: getStoredCity(),
+  lat: null,
+  lng: null,
+  openPicker: false,
+  setCity: (city) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("omnibook_city", city);
+    }
+    set({ city });
+  },
+  setCoords: (lat, lng) => set({ lat, lng }),
+  setOpenPicker: (openPicker) => set({ openPicker }),
 }));

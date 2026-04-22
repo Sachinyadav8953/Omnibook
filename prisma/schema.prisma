@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -55,6 +54,8 @@ model Theatre {
   cityId    String
   address   String
   imageUrl  String?
+  latitude  Float?
+  longitude Float?
   city      City     @relation(fields: [cityId], references: [id])
   screens   Screen[]
 }

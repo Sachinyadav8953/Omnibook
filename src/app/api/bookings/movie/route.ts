@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { acquireMultiLocks } from "@/lib/redis";
 
 export async function POST(req: NextRequest) {
   try {
@@ -41,27 +40,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "This show has already started" }, { status: 400 });
     }
 
-    const lockKeys = seatIds.map((seatId: string) => `seat:${showtimeId}:${seatId}`);
-    const lockResult = await acquireMultiLocks(lockKeys, session.userId);
-
-    if (!lockResult.success) {
-      return NextResponse.json(
-        { error: "Some seats are currently being booked by another user. Please try different seats." },
-        { status: 409 }
-      );
-    }
-
+    const tenMinsAgo = new Date(Date.now() - 10 * 60 * 1000);
     const existingStatuses = await prisma.showtimeSeatStatus.findMany({
       where: {
         showtimeId,
         seatId: { in: seatIds },
-        status: "BOOKED",
+        OR: [
+          { status: "BOOKED" },
+          { 
+            status: "LOCKED",
+            lockedAt: { gt: tenMinsAgo }
+          }
+        ]
       },
     });
 
     if (existingStatuses.length > 0) {
       return NextResponse.json(
-        { error: "Some selected seats are already booked" },
+        { error: "Some selected seats are already booked or temporarily locked by another user." },
         { status: 409 }
       );
     }

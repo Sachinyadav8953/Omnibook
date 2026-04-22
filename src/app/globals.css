@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   :root {
@@ -22,7 +20,7 @@
   }
 
   * {
-    @apply border-zinc-200;
+    border-color: var(--color-zinc-200);
   }
 
   body {
@@ -31,6 +29,17 @@
   
   h1, h2, h3, h4, h5, h6, .font-serif {
     font-family: 'Playfair Display', serif;
+  }
+
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better selection color */
+  ::selection {
+    background-color: #183e29;
+    color: white;
   }
 }
 
@@ -103,7 +112,7 @@
   /* Status Chips */
   .chip {
     @apply inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold
-    bg-[var(--secondary)] text-[var(--secondary-foreground)];
+    bg-[var(--secondary)] text-[var(--secondary-foreground)] transition-all duration-200;
   }
 
   .chip-accent {
@@ -138,5 +147,43 @@
 
   .seat-locked {
     @apply bg-orange-100 text-orange-400 border-orange-200 cursor-not-allowed;
+  }
+}
+
+/* Custom scrollbar */
+@layer base {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d1cfc7;
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b0aea6;
+  }
+}
+
+/* Skeleton shimmer animation */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #f0eee5 25%,
+    #e8e5d8 37%,
+    #f0eee5 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }

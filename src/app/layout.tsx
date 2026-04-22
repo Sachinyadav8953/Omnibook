@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import LocationPicker from "@/components/LocationPicker";
 
 export const metadata: Metadata = {
   title: "OmniBook | Universal Booking Engine",
@@ -27,8 +28,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 pt-16">{children}</main>
         <Footer />
+        <LocationPicker />
       </body>
     </html>
   );
