@@ -37,7 +37,7 @@ export async function POST(
       return NextResponse.json({ error: "Booking is already cancelled" }, { status: 400 });
     }
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       await tx.booking.update({
         where: { id },
         data: { status: "CANCELLED", lockedUntil: null },

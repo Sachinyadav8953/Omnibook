@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
 
     const lockedUntil = new Date(Date.now() + 10 * 60 * 1000);
 
-    const booking = await prisma.$transaction(async (tx) => {
+    const booking = await prisma.$transaction(async (tx: any) => {
       const newBooking = await tx.booking.create({
         data: {
           userId: session.userId,

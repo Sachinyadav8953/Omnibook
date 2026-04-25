@@ -22,7 +22,7 @@ export async function POST() {
     let expiredCount = 0;
 
     for (const booking of expiredBookings) {
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx: any) => {
         await tx.booking.update({
           where: { id: booking.id },
           data: { status: "EXPIRED" },

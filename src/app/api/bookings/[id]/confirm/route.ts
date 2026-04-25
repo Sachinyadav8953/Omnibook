@@ -40,7 +40,7 @@ export async function POST(
       return NextResponse.json({ error: "Booking has expired. Please start over." }, { status: 410 });
     }
 
-    const confirmed = await prisma.$transaction(async (tx) => {
+    const confirmed = await prisma.$transaction(async (tx: any) => {
       const updated = await tx.booking.update({
         where: { id },
         data: {
