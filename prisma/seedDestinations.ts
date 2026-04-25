@@ -25,13 +25,13 @@ const generateDestinations = async () => {
   console.log("Fetching countries from REST Countries API...");
   const res = await fetch("https://restcountries.com/v3.1/all?fields=name,capital,region");
   const countries = await res.json();
-  
+
   // Filter out those without capitals
   let validCountries = countries.filter((c: any) => c.capital && c.capital.length > 0 && c.region);
-  
+
   // Shuffle randomly
   validCountries = validCountries.sort(() => 0.5 - Math.random());
-  
+
   // We need 15 per season (4 seasons * 15 = 60 destinations)
   const requiredCount = 60;
   const selectedCountries = validCountries.slice(0, requiredCount);
@@ -45,20 +45,20 @@ const generateDestinations = async () => {
   };
 
   const destinations = [];
-  
+
   for (let i = 0; i < selectedCountries.length; i++) {
     const c = selectedCountries[i];
     const city = c.capital[0];
     const country = c.name.common;
     const region = c.region;
-    
+
     // Assign season evenly
     const season = seasons[Math.floor(i / 15)];
     const bestMonths = bestMonthsMap[season];
 
-    console.log(`Fetching wiki data for ${city}, ${country} (${i+1}/${requiredCount})...`);
+    console.log(`Fetching wiki data for ${city}, ${country} (${i + 1}/${requiredCount})...`);
     const wikiData = await fetchWikipediaData(city);
-    
+
     // Delay to not hammer wikipedia
     await new Promise(r => setTimeout(r, 200));
 
@@ -85,16 +85,16 @@ const generateDestinations = async () => {
 
 async function main() {
   console.log("Generating destinations by season...");
-  const destinations = generateDestinations();
-  
+  const destinations = await generateDestinations();
+
   console.log("Clearing existing destinations...");
   await prisma.destination.deleteMany({});
-  
+
   console.log("Inserting destinations into Neon DB...");
   const created = await prisma.destination.createMany({
     data: destinations
   });
-  
+
   console.log(`Successfully seeded ${created.count} destinations!`);
 }
 

@@ -151,7 +151,7 @@ export async function getMovieVideos(movieId: number) {
 }
 
 export async function searchMovies(query: string, page = 1) {
-  return tmdbFetch<{ results: TMDBMovie[]; total_pages: number }>(
+  return tmdbFetch<{ results: TMDBMovie[]; total_pages: number; total_results: number }>(
     "/search/movie",
     { query, page: page.toString(), language: "en-US" }
   );
