@@ -96,7 +96,7 @@ export default function DashboardPage() {
     pending: bookings.filter((b) => b.status === "PENDING").length,
     totalSpent: bookings
       .filter((b) => b.status === "CONFIRMED")
-      .reduce((sum, b) => sum + b.totalAmount, 0),
+      .reduce((sum: number, b: any) => sum + b.totalAmount, 0),
   };
 
   const handleCancel = async (bookingId: string) => {

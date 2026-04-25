@@ -132,7 +132,7 @@ export async function GET(
 
     const avgRating =
       hotel.reviews.length > 0
-        ? hotel.reviews.reduce((sum, r) => sum + r.rating, 0) / hotel.reviews.length
+        ? hotel.reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / hotel.reviews.length
         : 0;
 
     return NextResponse.json({
