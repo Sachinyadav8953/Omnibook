@@ -60,7 +60,7 @@ export async function POST(
       });
 
       if (booking.type === "MOVIE" && booking.movieDetail) {
-        const seatIds = booking.movieDetail.seats.map((s) => s.seatId);
+        const seatIds = booking.movieDetail.seats.map((s: any) => s.seatId);
         for (const seatId of seatIds) {
           await tx.showtimeSeatStatus.upsert({
             where: {
