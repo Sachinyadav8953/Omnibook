@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
     });
 
     let totalAmount = 0;
-    const seatPrices = seats.map((seat) => {
+    const seatPrices = seats.map((seat: any) => {
       let price = showtime.basePrice;
       if (seat.type === "PREMIUM") price = showtime.premiumPrice;
       if (seat.type === "VIP") price = showtime.vipPrice;
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
             create: {
               showtimeId,
               seats: {
-                create: seatPrices.map((sp) => ({
+                create: seatPrices.map((sp: any) => ({
                   seatId: sp.seatId,
                   price: sp.price,
                 })),
