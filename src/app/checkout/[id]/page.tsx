@@ -241,7 +241,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-1.5 mt-2">
-                    {item.seats.map((s) => (
+                    {item.seats.map((s: any) => (
                       <span key={s.seatId} className="chip text-xs">
                         {s.row}{s.number} ({s.type}) - {formatCurrency(s.price)}
                       </span>

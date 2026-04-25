@@ -272,7 +272,7 @@ export function generateShowtimes(movieId: string, userLat?: number, userLng?: n
             }
           }
 
-          const seatStatuses = Array.from(bookedSet).map(seatId => ({
+          const seatStatuses = Array.from(bookedSet).map((seatId: any) => ({
             seatId,
             status: "BOOKED" as const,
           }));
@@ -308,8 +308,8 @@ export function generateShowtimes(movieId: string, userLat?: number, userLng?: n
   // Sort by proximity if user location provided
   if (userLat !== undefined && userLng !== undefined && !isNaN(userLat) && !isNaN(userLng)) {
     showtimes.sort((a, b) => {
-      const cinemaA = cinemas.find(c => c.id === a.cinemaId)!;
-      const cinemaB = cinemas.find(c => c.id === b.cinemaId)!;
+      const cinemaA = cinemas.find((c: any) => c.id === a.cinemaId)!;
+      const cinemaB = cinemas.find((c: any) => c.id === b.cinemaId)!;
       const distA = Math.sqrt(Math.pow(cinemaA.latitude - userLat, 2) + Math.pow(cinemaA.longitude - userLng, 2));
       const distB = Math.sqrt(Math.pow(cinemaB.latitude - userLat, 2) + Math.pow(cinemaB.longitude - userLng, 2));
       return distA - distB;

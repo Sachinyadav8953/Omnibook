@@ -85,17 +85,17 @@ export default function DashboardPage() {
     filter === "all"
       ? bookings
       : filter === "movies"
-      ? bookings.filter((b) => b.type === "MOVIE")
+      ? bookings.filter((b: any) => b.type === "MOVIE")
       : filter === "hotels"
-      ? bookings.filter((b) => b.type === "HOTEL")
-      : bookings.filter((b) => b.status === filter.toUpperCase());
+      ? bookings.filter((b: any) => b.type === "HOTEL")
+      : bookings.filter((b: any) => b.status === filter.toUpperCase());
 
   const stats = {
     total: bookings.length,
-    confirmed: bookings.filter((b) => b.status === "CONFIRMED").length,
-    pending: bookings.filter((b) => b.status === "PENDING").length,
+    confirmed: bookings.filter((b: any) => b.status === "CONFIRMED").length,
+    pending: bookings.filter((b: any) => b.status === "PENDING").length,
     totalSpent: bookings
-      .filter((b) => b.status === "CONFIRMED")
+      .filter((b: any) => b.status === "CONFIRMED")
       .reduce((sum: number, b: any) => sum + b.totalAmount, 0),
   };
 
@@ -104,7 +104,7 @@ export default function DashboardPage() {
       const res = await fetch(`/api/bookings/${bookingId}/cancel`, { method: "POST" });
       if (res.ok) {
         setBookings((prev) =>
-          prev.map((b) => (b.id === bookingId ? { ...b, status: "CANCELLED" } : b))
+          prev.map((b: any) => (b.id === bookingId ? { ...b, status: "CANCELLED" } : b))
         );
       }
     } catch {
@@ -174,7 +174,7 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold text-[#183e29]">{formatCurrency(stats.totalSpent)}</p>
           </div>
         </div><div className="flex flex-wrap gap-2 mb-6">
-          {["all", "movies", "hotels", "confirmed", "pending", "cancelled"].map((f) => (
+          {["all", "movies", "hotels", "confirmed", "pending", "cancelled"].map((f: any) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
@@ -200,7 +200,7 @@ export default function DashboardPage() {
           </div>
         ) : (
           <motion.div className="space-y-3" initial="hidden" animate="visible">
-            {filtered.map((booking, i) => (
+            {filtered.map((booking: any, i: any) => (
               <motion.div key={booking.id} variants={fadeUp} custom={i} className="card p-5 hover:shadow-lg transition-shadow">
                 <div className="flex items-start gap-4"><div
                     className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${
@@ -249,7 +249,7 @@ export default function DashboardPage() {
                           <span>
                             Seats:{" "}
                             {booking.movieDetail.seats
-                              .map((s) => `${s.seat.row}${s.seat.number}`)
+                              .map((s: any) => `${s.seat.row}${s.seat.number}`)
                               .join(", ")}
                           </span>
                         </>

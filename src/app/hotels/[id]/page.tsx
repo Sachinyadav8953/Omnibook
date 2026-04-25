@@ -194,7 +194,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
 
         <div className="absolute bottom-0 left-0 right-0 page-container pb-8">
           <div className="flex items-center gap-2 mb-3">
-            {Array.from({ length: hotel.starRating }).map((_, i) => (
+            {Array.from({ length: hotel.starRating }).map((_: any, i: any) => (
               <Star key={i} size={14} className="text-yellow-400 fill-yellow-400" />
             ))}
           </div>
@@ -227,7 +227,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
             <div className="card p-6">
               <h2 className="font-semibold mb-4">Amenities</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {hotel.amenities.map((a) => (
+                {hotel.amenities.map((a: any) => (
                   <div key={a} className="flex items-center gap-3 text-sm text-zinc-400">
                     <div className="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center text-[#183e29]">
                       {amenityIcons[a] || <Star size={14} />}
@@ -278,7 +278,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
             <div>
               <h2 className="font-semibold mb-4">Available Rooms</h2>
               <div className="space-y-4">
-                {hotel.roomTypes.map((rt) => (
+                {hotel.roomTypes.map((rt: any) => (
                   <motion.div
                     key={rt.id}
                     className={`card p-5 cursor-pointer transition-all ${
@@ -323,7 +323,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                         </div>
                         {rt.amenities.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 mt-3">
-                            {rt.amenities.slice(0, 5).map((a) => (
+                            {rt.amenities.slice(0, 5).map((a: any) => (
                               <span key={a} className="chip text-xs">{a}</span>
                             ))}
                           </div>
@@ -339,7 +339,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
               <div>
                 <h2 className="font-semibold mb-4">Reviews</h2>
                 <div className="space-y-3">
-                  {hotel.reviews.map((review) => (
+                  {hotel.reviews.map((review: any) => (
                     <div key={review.id} className="card p-5">
                       <div className="flex items-center gap-3 mb-2">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#183e29] to-[#0f281a] flex items-center justify-center text-white text-xs font-bold">
@@ -348,7 +348,7 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
                         <div>
                           <p className="text-sm font-medium">{review.user.name}</p>
                           <div className="flex items-center gap-1">
-                            {Array.from({ length: review.rating }).map((_, i) => (
+                            {Array.from({ length: review.rating }).map((_: any, i: any) => (
                               <Star key={i} size={10} className="text-yellow-400 fill-yellow-400" />
                             ))}
                           </div>

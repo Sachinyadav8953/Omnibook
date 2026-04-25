@@ -125,13 +125,12 @@ export default function HotelsPage() {
 
       
       if (city) {
-        const cityMatches = results.filter((h) =>
+        const cityMatches = results.filter((h: any) =>
           h.city.name.toLowerCase().includes(city.toLowerCase())
         );
         
         if (cityMatches.length > 0) {
-          const rest = results.filter(
-            (h) => !h.city.name.toLowerCase().includes(city.toLowerCase())
+          const rest = results.filter((h: any) => !h.city.name.toLowerCase().includes(city.toLowerCase())
           );
           results = [...cityMatches, ...rest];
         }
@@ -261,7 +260,7 @@ export default function HotelsPage() {
                 </div><div>
                   <p className="text-xs font-medium text-zinc-400 mb-2.5 uppercase tracking-wider">Minimum Star Rating</p>
                   <div className="flex gap-2">
-                    {[0, 3, 4, 5].map((r) => (
+                    {[0, 3, 4, 5].map((r: any) => (
                       <button
                         key={r}
                         onClick={() => setMinRating(r)}
@@ -274,7 +273,7 @@ export default function HotelsPage() {
                 </div><div>
                   <p className="text-xs font-medium text-zinc-400 mb-2.5 uppercase tracking-wider">Price Range</p>
                   <div className="flex flex-wrap gap-2">
-                    {PRICE_RANGES.map((p) => (
+                    {PRICE_RANGES.map((p: any) => (
                       <button
                         key={p.value}
                         onClick={() => setPriceRange(p.value === priceRange ? "" : p.value)}
@@ -289,7 +288,7 @@ export default function HotelsPage() {
                     <ArrowUpDown size={11} /> Sort By
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {SORT_OPTIONS.map((s) => (
+                    {SORT_OPTIONS.map((s: any) => (
                       <button
                         key={s.value}
                         onClick={() => setSortBy(s.value === sortBy ? "" : s.value)}
@@ -327,7 +326,7 @@ export default function HotelsPage() {
             initial="hidden"
             animate="visible"
           >
-            {hotels.map((hotel, i) => (
+            {hotels.map((hotel: any, i: any) => (
               <motion.div key={hotel.id} variants={fadeUp} custom={i}>
                 <Link href={`/hotels/${hotel.id}`} className="block group">
                   <div className="card overflow-hidden h-full"><div className="relative h-52 overflow-hidden">
@@ -347,7 +346,7 @@ export default function HotelsPage() {
                       )}
                       {}
                       <div className="absolute top-3 right-3 flex items-center gap-0.5 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10">
-                        {Array.from({ length: hotel.starRating }).map((_, idx) => (
+                        {Array.from({ length: hotel.starRating }).map((_: any, idx: any) => (
                           <Star key={idx} size={10} className="text-yellow-400 fill-yellow-400" />
                         ))}
                       </div>
@@ -367,7 +366,7 @@ export default function HotelsPage() {
                         <MapPin size={10} />
                         {hotel.city.name}, {hotel.city.state}
                       </p><div className="flex flex-wrap gap-1.5 mb-4">
-                        {hotel.amenities.slice(0, 4).map((a) => (
+                        {hotel.amenities.slice(0, 4).map((a: any) => (
                           <span key={a} className="chip text-[10px] flex items-center gap-1 !px-2 !py-0.5">
                             {amenityIcons[a] || null}
                             {a}

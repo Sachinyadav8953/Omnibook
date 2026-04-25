@@ -141,7 +141,7 @@ export default function MovieDetailPage({ params }: { params: Promise<{ id: stri
                 <p className="text-sm text-[#c4a962] italic mb-2 font-serif">&ldquo;{movie.tagline}&rdquo;</p>
               )}
               <div className="flex items-center gap-2 mb-3 flex-wrap">
-                {movie.genres.map((g) => (
+                {movie.genres.map((g: any) => (
                   <span key={g} className="chip text-xs !bg-white/90 !text-zinc-700">{g}</span>
                 ))}
               </div>
@@ -233,7 +233,7 @@ export default function MovieDetailPage({ params }: { params: Promise<{ id: stri
                   Cast
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                  {movie.cast.map((member, idx) => (
+                  {movie.cast.map((member: any, idx: any) => (
                     <motion.div
                       key={member.id}
                       initial={{ opacity: 0, y: 10 }}

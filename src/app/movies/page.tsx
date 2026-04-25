@@ -177,7 +177,7 @@ export default function MoviesPage() {
 
         {!searchQuery && (
           <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-1">
-            {CATEGORY_TABS.map((tab) => (
+            {CATEGORY_TABS.map((tab: any) => (
               <button
                 key={tab.value}
                 onClick={() => setCategory(tab.value)}
@@ -239,7 +239,7 @@ export default function MoviesPage() {
                     >
                       All
                     </button>
-                    {GENRE_OPTIONS.map((g) => (
+                    {GENRE_OPTIONS.map((g: any) => (
                       <button
                         key={g}
                         onClick={() => setSelectedGenre(g === selectedGenre ? "" : g)}
@@ -258,7 +258,7 @@ export default function MoviesPage() {
                     >
                       All
                     </button>
-                    {LANGUAGE_OPTIONS.map((l) => (
+                    {LANGUAGE_OPTIONS.map((l: any) => (
                       <button
                         key={l.code}
                         onClick={() => setSelectedLang(l.code === selectedLang ? "" : l.code)}
@@ -273,7 +273,7 @@ export default function MoviesPage() {
                     <ArrowUpDown size={11} /> Sort By
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {SORT_OPTIONS.map((s) => (
+                    {SORT_OPTIONS.map((s: any) => (
                       <button
                         key={s.value}
                         onClick={() => setSortBy(s.value === sortBy ? "" : s.value)}
@@ -311,7 +311,7 @@ export default function MoviesPage() {
             initial="hidden"
             animate="visible"
           >
-            {movies.map((movie, i) => (
+            {movies.map((movie: any, i: any) => (
               <motion.div key={movie.id} variants={fadeUp} custom={i}>
                 <Link href={`/movies/${movie.id}`} className="group block">
                   <div className="relative aspect-[2/3] rounded-2xl overflow-hidden mb-3 bg-[#f0eee5] shadow-sm group-hover:shadow-xl transition-shadow duration-500">

@@ -112,8 +112,8 @@ export default function DestinationsPage() {
   };
 
   // Recommended destinations for current month
-  const recommendedDestinations = destinations.filter(d => d.bestMonths.includes(currentMonthIndex));
-  const otherDestinations = destinations.filter(d => !d.bestMonths.includes(currentMonthIndex));
+  const recommendedDestinations = destinations.filter((d: any) => d.bestMonths.includes(currentMonthIndex));
+  const otherDestinations = destinations.filter((d: any) => !d.bestMonths.includes(currentMonthIndex));
 
   const getSeasonIcon = (seasonType: string | null) => {
     if (!seasonType) return <Compass size={14} />;
@@ -339,7 +339,7 @@ export default function DestinationsPage() {
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {searchResult.suggestions.map((suggestion, i) => (
+                  {searchResult.suggestions.map((suggestion: any, i: any) => (
                     <motion.div
                       key={suggestion.id}
                       initial={{ opacity: 0, y: 30 }}
@@ -383,7 +383,7 @@ export default function DestinationsPage() {
           <>
             {/* Category Filters */}
             <div className="flex overflow-x-auto hide-scrollbar gap-2 mb-12 pb-2">
-              {CATEGORIES.map((cat) => (
+              {CATEGORIES.map((cat: any) => (
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
@@ -411,8 +411,8 @@ export default function DestinationsPage() {
                 {/* When "All" is selected, group destinations by Season */}
                 {activeCategory === "All" ? (
                   <>
-                    {CATEGORIES.filter(c => c !== "All").map(season => {
-                      const seasonDestinations = destinations.filter(d => 
+                    {CATEGORIES.filter((c: any) => c !== "All").map((season: any) => {
+                      const seasonDestinations = destinations.filter((d: any) => 
                         d.seasonType?.toLowerCase() === season.toLowerCase() || 
                         d.tags?.includes(season)
                       );
@@ -433,7 +433,7 @@ export default function DestinationsPage() {
                             whileInView="visible"
                             viewport={{ once: true, margin: "-50px" }}
                           >
-                            {seasonDestinations.map((dest, i) => renderDestinationCard(dest, i))}
+                            {seasonDestinations.map((dest: any, i: any) => renderDestinationCard(dest, i))}
                           </motion.div>
                         </div>
                       );
@@ -453,7 +453,7 @@ export default function DestinationsPage() {
                       initial="hidden"
                       animate="visible"
                     >
-                      {destinations.map((dest, i) => renderDestinationCard(dest, i))}
+                      {destinations.map((dest: any, i: any) => renderDestinationCard(dest, i))}
                     </motion.div>
                   </div>
                 )}

@@ -26,9 +26,8 @@ export async function GET(
       getMovieVideos(movieId).catch(() => ({ results: [] })),
     ]);
 
-    const director = (credits.crew || []).find((c) => c.job === "Director");
-    const trailer = (videos.results || []).find(
-      (v) => v.site === "YouTube" && (v.type === "Trailer" || v.type === "Teaser")
+    const director = (credits.crew || []).find((c: any) => c.job === "Director");
+    const trailer = (videos.results || []).find((v: any) => v.site === "YouTube" && (v.type === "Trailer" || v.type === "Teaser")
     );
 
     const movie = {
@@ -42,17 +41,17 @@ export async function GET(
       rating: Math.round(detail.vote_average * 10) / 10,
       voteCount: detail.vote_count,
       runtime: detail.runtime,
-      genres: (detail.genres || []).map((g) => g.name),
+      genres: (detail.genres || []).map((g: any) => g.name),
       status: detail.status,
       director: director?.name || "Unknown",
-      cast: (credits.cast || []).slice(0, 12).map((c) => ({
+      cast: (credits.cast || []).slice(0, 12).map((c: any) => ({
         id: c.id,
         name: c.name,
         character: c.character,
         profileUrl: profileUrl(c.profile_path),
       })),
       trailerKey: trailer?.key || null,
-      productionCompanies: (detail.production_companies || []).map((p) => p.name),
+      productionCompanies: (detail.production_companies || []).map((p: any) => p.name),
     };
 
     return NextResponse.json({ movie });

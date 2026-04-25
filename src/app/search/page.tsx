@@ -174,7 +174,7 @@ export default function SearchPage() {
               Cities
             </h2>
             <div className="flex flex-wrap gap-2">
-              {results.cities.map((city) => (
+              {results.cities.map((city: any) => (
                 <Link
                   key={city.id}
                   href={`/hotels?cityId=${city.id}`}
@@ -200,7 +200,7 @@ export default function SearchPage() {
               Movies
             </h2>
             <div className="space-y-2.5">
-              {results.movies.map((movie, i) => (
+              {results.movies.map((movie: any, i: any) => (
                 <motion.div
                   key={movie.id}
                   initial={{ opacity: 0, y: 10 }}
@@ -250,7 +250,7 @@ export default function SearchPage() {
               Hotels
             </h2>
             <div className="space-y-2.5">
-              {results.hotels.map((hotel, i) => (
+              {results.hotels.map((hotel: any, i: any) => (
                 <motion.div
                   key={hotel.id}
                   initial={{ opacity: 0, y: 10 }}

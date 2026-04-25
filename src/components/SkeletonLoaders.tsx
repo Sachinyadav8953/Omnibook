@@ -26,7 +26,7 @@ export function MovieCardSkeleton() {
 export function MovieGridSkeleton({ count = 10 }: { count?: number }) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-      {Array.from({ length: count }).map((_, i) => (
+      {Array.from({ length: count }).map((_: any, i: any) => (
         <motion.div
           key={i}
           initial={{ opacity: 0, y: 20 }}
@@ -69,7 +69,7 @@ export function HotelCardSkeleton() {
 export function HotelGridSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-      {Array.from({ length: count }).map((_, i) => (
+      {Array.from({ length: count }).map((_: any, i: any) => (
         <motion.div
           key={i}
           initial={{ opacity: 0, y: 20 }}
@@ -135,7 +135,7 @@ export function DestinationCardSkeleton() {
 export function DestinationGridSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {Array.from({ length: count }).map((_, i) => (
+      {Array.from({ length: count }).map((_: any, i: any) => (
         <motion.div
           key={i}
           initial={{ opacity: 0, y: 20 }}

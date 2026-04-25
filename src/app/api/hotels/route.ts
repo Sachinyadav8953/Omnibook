@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
     });
 
     const hotelsWithAvailability = await Promise.all(
-      hotels.map(async (hotel) => {
+      hotels.map(async (hotel: any) => {
         const avgRating =
           hotel.reviews.length > 0
             ? hotel.reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / hotel.reviews.length
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
 
         if (checkIn && checkOut) {
           roomTypesWithAvailability = await Promise.all(
-            hotel.roomTypes.map(async (rt) => {
+            hotel.roomTypes.map(async (rt: any) => {
               const bookedRooms = await prisma.hotelBookingDetail.aggregate({
                 where: {
                   roomTypeId: rt.id,
@@ -77,7 +77,7 @@ export async function GET(req: NextRequest) {
           reviewCount: hotel.reviews.length,
           startingPrice:
             hotel.roomTypes.length > 0
-              ? Math.min(...hotel.roomTypes.map((rt) => rt.pricePerNight))
+              ? Math.min(...hotel.roomTypes.map((rt: any) => rt.pricePerNight))
               : 0,
         };
       })

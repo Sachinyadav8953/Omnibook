@@ -88,7 +88,7 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
 
   const toggleSeat = (seatId: string) => {
     if (selectedSeats.includes(seatId)) {
-      setSelectedSeats(selectedSeats.filter(id => id !== seatId));
+      setSelectedSeats(selectedSeats.filter((id: any) => id !== seatId));
     } else {
       if (selectedSeats.length >= 10) return;
       setSelectedSeats([...selectedSeats, seatId]);
@@ -120,11 +120,11 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
 
       // Build cart item
       const seatDetails = selectedSeats
-        .map(id => selectedShowtime.screen.seats.find(s => s.id === id)!)
+        .map((id: any) => selectedShowtime.screen.seats.find((s: any) => s.id === id)!)
         .filter(Boolean);
 
       let total = 0;
-      const cartSeats = seatDetails.map(seat => {
+      const cartSeats = seatDetails.map((seat: any) => {
         let price = selectedShowtime.basePrice;
         if (seat.type === "PREMIUM") price = selectedShowtime.premiumPrice;
         if (seat.type === "VIP") price = selectedShowtime.vipPrice;
@@ -149,13 +149,13 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
       setBookingSuccess(true);
 
       // Update local showtime data to mark seats as booked
-      setShowtimes(prev => prev.map(st => {
+      setShowtimes(prev => prev.map((st: any) => {
         if (st.id === selectedShowtime.id) {
           return {
             ...st,
             seatStatuses: [
               ...st.seatStatuses,
-              ...selectedSeats.map(seatId => ({ seatId, status: "BOOKED" as const })),
+              ...selectedSeats.map((seatId: any) => ({ seatId, status: "BOOKED" as const })),
             ],
           };
         }
@@ -197,13 +197,13 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
     );
   }
 
-  const availableDates = Array.from(new Set(showtimes.map(st => format(new Date(st.startTime), 'yyyy-MM-dd')))).sort();
-  const dateShowtimes = showtimes.filter(st => format(new Date(st.startTime), 'yyyy-MM-dd') === selectedDate);
-  const selectedShowtime = showtimes.find(st => st.id === selectedShowtimeId);
+  const availableDates = Array.from(new Set(showtimes.map((st: any) => format(new Date(st.startTime), 'yyyy-MM-dd')))).sort();
+  const dateShowtimes = showtimes.filter((st: any) => format(new Date(st.startTime), 'yyyy-MM-dd') === selectedDate);
+  const selectedShowtime = showtimes.find((st: any) => st.id === selectedShowtimeId);
 
   let rows: Record<string, Seat[]> = {};
   if (selectedShowtime) {
-    rows = selectedShowtime.screen.seats.reduce((acc, seat) => {
+    rows = selectedShowtime.screen.seats.reduce((acc: any, seat: any) => {
       if (!acc[seat.row]) acc[seat.row] = [];
       acc[seat.row].push(seat);
       return acc;
@@ -222,7 +222,7 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
 
       {/* Date picker */}
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-        {availableDates.map(date => {
+        {availableDates.map((date: any) => {
           const d = new Date(date);
           const isSelected = selectedDate === date;
           return (
@@ -258,8 +258,8 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
             exit={{ opacity: 0, scale: 0.95 }}
             className="space-y-4"
           >
-            {Array.from(new Set(dateShowtimes.map(st => st.screen.theatre.id))).map(theatreId => {
-              const theatreShowtimes = dateShowtimes.filter(st => st.screen.theatre.id === theatreId);
+            {Array.from(new Set(dateShowtimes.map((st: any) => st.screen.theatre.id))).map((theatreId: any) => {
+              const theatreShowtimes = dateShowtimes.filter((st: any) => st.screen.theatre.id === theatreId);
               const theatre = theatreShowtimes[0].screen.theatre;
 
               return (
@@ -278,7 +278,7 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
                     )}
                   </div>
                   <div className="flex flex-wrap gap-3">
-                    {theatreShowtimes.map(st => {
+                    {theatreShowtimes.map((st: any) => {
                       const timeStr = format(new Date(st.startTime), 'hh:mm a');
                       return (
                         <button
@@ -327,12 +327,12 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
             {/* Seat map */}
             <div className="overflow-x-auto pb-4">
               <div className="min-w-max mx-auto space-y-2">
-                {Object.keys(rows).sort().map(rowStr => (
+                {Object.keys(rows).sort().map((rowStr: any) => (
                   <div key={rowStr} className="flex items-center gap-4 justify-center">
                     <span className="w-4 text-xs font-bold text-zinc-400 text-right">{rowStr}</span>
                     <div className="flex gap-1.5">
-                      {rows[rowStr].map(seat => {
-                        const statusObj = selectedShowtime.seatStatuses.find(s => s.seatId === seat.id);
+                      {rows[rowStr].map((seat: any) => {
+                        const statusObj = selectedShowtime.seatStatuses.find((s: any) => s.seatId === seat.id);
                         const isUnavailable = statusObj && (statusObj.status === "BOOKED" || statusObj.status === "LOCKED");
                         const isSelected = selectedSeats.includes(seat.id);
 
@@ -428,12 +428,12 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
                       {selectedSeats.length} seat{selectedSeats.length !== 1 && 's'} selected
                     </p>
                     <p className="text-xl font-bold text-[#183e29]">
-                      ₹{selectedSeats.map(id => {
-                        const s = selectedShowtime.screen.seats.find(x => x.id === id);
+                      ₹{selectedSeats.map((id: any) => {
+                        const s = selectedShowtime.screen.seats.find((x: any) => x.id === id);
                         if (s?.type === 'VIP') return selectedShowtime.vipPrice;
                         if (s?.type === 'PREMIUM') return selectedShowtime.premiumPrice;
                         return selectedShowtime.basePrice;
-                      }).reduce((a, b) => a + b, 0)}
+                      }).reduce((a: any, b: any) => a + b, 0)}
                     </p>
                   </div>
                   <button

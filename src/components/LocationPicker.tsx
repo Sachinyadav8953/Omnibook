@@ -42,8 +42,7 @@ export default function LocationPicker() {
     }
   }, [city]);
 
-  const filteredCities = INDIAN_CITIES.filter(
-    (c) =>
+  const filteredCities = INDIAN_CITIES.filter((c: any) =>
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.state.toLowerCase().includes(search.toLowerCase())
   );
@@ -72,8 +71,7 @@ export default function LocationPicker() {
             "Unknown";
           
           
-          const matched = INDIAN_CITIES.find(
-            (c) => detectedCity.toLowerCase().includes(c.name.toLowerCase())
+          const matched = INDIAN_CITIES.find((c: any) => detectedCity.toLowerCase().includes(c.name.toLowerCase())
           );
           setCity(matched?.name || detectedCity);
         } catch {
@@ -162,7 +160,7 @@ export default function LocationPicker() {
               </div>
             </div><div className="p-4 overflow-y-auto flex-1">
               <div className="grid grid-cols-3 gap-2.5">
-                {filteredCities.map((c) => (
+                {filteredCities.map((c: any) => (
                   <motion.button
                     key={c.name}
                     whileTap={{ scale: 0.95 }}

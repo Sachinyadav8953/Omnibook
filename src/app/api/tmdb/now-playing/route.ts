@@ -38,8 +38,8 @@ export async function GET(req: NextRequest) {
 
     
     let movies = data.results
-      .filter((m) => m.poster_path) 
-      .map((m) => ({
+      .filter((m: any) => m.poster_path) 
+      .map((m: any) => ({
         id: m.id,
         title: m.title,
         overview: m.overview,
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
         releaseDate: m.release_date,
         rating: Math.round(m.vote_average * 10) / 10,
         voteCount: m.vote_count,
-        genres: m.genre_ids.map((gid) => TMDB_GENRES[gid] || "Other").filter(Boolean),
+        genres: m.genre_ids.map((gid: any) => TMDB_GENRES[gid] || "Other").filter(Boolean),
         language: getLanguageName(m.original_language),
         languageCode: m.original_language,
         popularity: m.popularity,
@@ -56,13 +56,13 @@ export async function GET(req: NextRequest) {
 
     
     if (genre) {
-      movies = movies.filter((m) =>
-        m.genres.some((g) => g.toLowerCase() === genre.toLowerCase())
+      movies = movies.filter((m: any) =>
+        m.genres.some((g: any) => g.toLowerCase() === genre.toLowerCase())
       );
     }
 
     if (language) {
-      movies = movies.filter((m) => m.languageCode === language);
+      movies = movies.filter((m: any) => m.languageCode === language);
     }
 
     
