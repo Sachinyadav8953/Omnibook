@@ -108,7 +108,7 @@ export async function GET(
     }
 
     const roomTypesWithAvailability = await Promise.all(
-      hotel.roomTypes.map(async (rt) => {
+      hotel.roomTypes.map(async (rt: any) => {
         if (!checkIn || !checkOut) {
           return { ...rt, availableRooms: rt.totalRooms };
         }
