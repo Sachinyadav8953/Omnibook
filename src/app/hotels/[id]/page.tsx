@@ -3,7 +3,8 @@
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useCartStore, useAuthStore } from "@/store";
+import { useCartStore } from "@/store";
+import { useUser } from "@clerk/nextjs";
 import { formatCurrency, getDaysBetween } from "@/lib/utils";
 import {
   Star,
@@ -73,7 +74,7 @@ const amenityIcons: Record<string, React.ReactNode> = {
 export default function HotelDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { user, isLoaded } = useUser();
   const { setItem, setBookingId, setLockedUntil } = useCartStore();
 
   const [hotel, setHotel] = useState<HotelData | null>(null);
@@ -111,8 +112,8 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
   const totalAmount = selectedRoom ? selectedRoom.pricePerNight * nights * rooms : 0;
 
   const handleBooking = async () => {
-    if (!user) {
-      router.push("/auth/login");
+    if (!isLoaded || !user) {
+      router.push("/sign-in");
       return;
     }
     if (!selectedRoom) return;

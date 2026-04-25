@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/store";
+import { useUser } from "@clerk/nextjs";
 import { formatCurrency, formatDate, formatTime, getStatusColor, getStatusBg } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {
@@ -62,16 +62,17 @@ const fadeUp = {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { user, isLoaded } = useUser();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
-    if (!user) {
-      router.push("/auth/login");
+    if (isLoaded && !user) {
+      router.push("/sign-in");
       return;
     }
+    if (!isLoaded || !user) return;
 
     fetch("/api/bookings")
       .then((r) => r.json())
@@ -125,10 +126,10 @@ export default function DashboardPage() {
         <div className="page-container py-8">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#183e29] to-[#1a5035] flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-[#183e29]/20">
-              {user?.name?.charAt(0).toUpperCase()}
+              {user?.firstName?.charAt(0).toUpperCase() || user?.fullName?.charAt(0).toUpperCase()}
             </div>
             <div>
-              <h1 className="text-2xl font-bold font-serif">Welcome back, {user?.name}</h1>
+              <h1 className="text-2xl font-bold font-serif">Welcome back, {user?.firstName || user?.fullName}</h1>
               <p className="text-sm text-zinc-400 font-sans">Manage your bookings and itinerary</p>
             </div>
           </div>

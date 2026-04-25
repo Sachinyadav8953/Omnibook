@@ -3,6 +3,7 @@ import {
   getNowPlaying,
   getPopular,
   getUpcoming,
+  searchMovies,
   posterUrl,
   backdropUrl,
   TMDB_GENRES,
@@ -17,17 +18,22 @@ export async function GET(req: NextRequest) {
     const genre = searchParams.get("genre"); 
     const language = searchParams.get("language"); 
     const sortBy = searchParams.get("sort"); 
+    const query = searchParams.get("query");
 
     let data;
-    switch (category) {
-      case "popular":
-        data = await getPopular(page);
-        break;
-      case "upcoming":
-        data = await getUpcoming(page);
-        break;
-      default:
-        data = await getNowPlaying(page);
+    if (query) {
+      data = await searchMovies(query, page);
+    } else {
+      switch (category) {
+        case "popular":
+          data = await getPopular(page);
+          break;
+        case "upcoming":
+          data = await getUpcoming(page);
+          break;
+        default:
+          data = await getNowPlaying(page);
+      }
     }
 
     

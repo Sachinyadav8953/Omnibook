@@ -9,14 +9,15 @@ import {
   MapPin,
   Wifi,
   Car,
-  Coffee,
   Filter,
   Hotel as HotelIcon,
   X,
   ArrowUpDown,
+  Search,
   Dumbbell,
   Waves,
   UtensilsCrossed,
+  Coffee,
 } from "lucide-react";
 import { useLocationStore } from "@/store";
 import { HotelGridSkeleton } from "@/components/SkeletonLoaders";
@@ -76,7 +77,21 @@ export default function HotelsPage() {
   const [minRating, setMinRating] = useState(0);
   const [priceRange, setPriceRange] = useState("");
   const [sortBy, setSortBy] = useState("");
-  const { city, setOpenPicker } = useLocationStore();
+  const { city, setCity, setOpenPicker } = useLocationStore();
+  const [searchInput, setSearchInput] = useState(city || "");
+
+  useEffect(() => {
+    setSearchInput(city || "");
+  }, [city]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchInput !== city) {
+        setCity(searchInput);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchInput, city, setCity]);
 
   const fetchHotels = useCallback(async () => {
     setLoading(true);
@@ -181,7 +196,31 @@ export default function HotelsPage() {
             </div>
           </motion.div>
         </div>
-      </section><div className="page-container pb-20"><div className="flex items-center justify-between mb-8">
+      </section>
+      
+      <div className="page-container pb-20">
+        <div className="relative mb-6">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Search size={18} className="text-zinc-400" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search hotels by city name (e.g., London, Dubai, Mumbai)..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="w-full pl-11 pr-4 py-3 bg-white/80 backdrop-blur-md border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#183e29] focus:border-transparent transition-all shadow-sm placeholder:text-zinc-400"
+          />
+          {searchInput && (
+            <button
+              onClick={() => setSearchInput("")}
+              className="absolute inset-y-0 right-0 pr-4 flex items-center text-zinc-400 hover:text-zinc-600"
+            >
+              <X size={16} />
+            </button>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between mb-8">
           <p className="text-sm text-zinc-500 font-sans">
             {loading
               ? "Finding the best stays..."

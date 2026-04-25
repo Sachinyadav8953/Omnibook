@@ -107,16 +107,12 @@ interface LocationState {
   setCoords: (lat: number, lng: number) => void;
   openPicker: boolean;
   setOpenPicker: (open: boolean) => void;
+  initCity: () => void;
 }
 
-
-function getStoredCity(): string {
-  if (typeof window === "undefined") return "";
-  return localStorage.getItem("omnibook_city") || "";
-}
 
 export const useLocationStore = create<LocationState>((set) => ({
-  city: getStoredCity(),
+  city: "",
   lat: null,
   lng: null,
   openPicker: false,
@@ -128,4 +124,10 @@ export const useLocationStore = create<LocationState>((set) => ({
   },
   setCoords: (lat, lng) => set({ lat, lng }),
   setOpenPicker: (openPicker) => set({ openPicker }),
+  initCity: () => {
+    if (typeof window !== "undefined") {
+      const city = localStorage.getItem("omnibook_city") || "";
+      set({ city });
+    }
+  }
 }));

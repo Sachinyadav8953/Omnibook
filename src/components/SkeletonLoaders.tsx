@@ -114,3 +114,37 @@ export function PulseLoader({ text = "Loading..." }: { text?: string }) {
     </div>
   );
 }
+
+export function DestinationCardSkeleton() {
+  return (
+    <div className="relative h-[400px] rounded-2xl overflow-hidden animate-pulse">
+      <Shimmer className="w-full h-full !rounded-2xl" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+      <div className="absolute bottom-6 left-6 right-6 space-y-3">
+        <Shimmer className="h-6 w-3/4 !rounded-lg" />
+        <Shimmer className="h-4 w-1/2 !rounded-lg" />
+        <div className="flex gap-2 mt-2">
+          <Shimmer className="h-5 w-16 !rounded-full" />
+          <Shimmer className="h-5 w-16 !rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function DestinationGridSkeleton({ count = 6 }: { count?: number }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {Array.from({ length: count }).map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.06, duration: 0.3 }}
+        >
+          <DestinationCardSkeleton />
+        </motion.div>
+      ))}
+    </div>
+  );
+}

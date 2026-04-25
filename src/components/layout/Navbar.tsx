@@ -3,35 +3,28 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuthStore } from "@/store";
+import { useLocationStore } from "@/store";
 import { Menu, X, LogOut, LayoutDashboard, Ticket, Hotel } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { user, clearUser } = useAuthStore();
+  const { isSignedIn } = useUser();
+  const initCity = useLocationStore((state) => state.initCity);
   const isHome = pathname === "/";
 
   useEffect(() => {
+    initCity();
+    
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" });
-      clearUser();
-    } catch {
-      
-    }
-  };
-
-  
+  }, [initCity]);
   const navClass = isHome && !scrolled
     ? "bg-transparent text-white border-transparent"
     : scrolled
@@ -51,33 +44,31 @@ export default function Navbar() {
           </Link><div className="hidden md:flex items-center gap-8 text-sm font-medium">
             <Link href="/movies" className="hover:text-[#c4a962] transition-colors">Movies</Link>
             <Link href="/hotels" className="hover:text-[#c4a962] transition-colors">Hotels</Link>
-            <Link href="/search" className="hover:text-[#c4a962] transition-colors">Search</Link>
+            <Link href="/destinations" className="hover:text-[#c4a962] transition-colors">Destinations</Link>
           </div>
 
           <div className="hidden md:flex items-center gap-4">
-            {user ? (
-              <div className="flex items-center gap-4">
+            {isSignedIn ? (
+              <>
                 <Link href="/dashboard" className="text-sm font-medium hover:text-[#c4a962] transition-colors flex items-center gap-1">
                   <LayoutDashboard size={16} />
                   Dashboard
                 </Link>
                 <div className="h-4 w-px bg-white/20"></div>
-                <button
-                  onClick={handleLogout}
-                  className="text-sm font-medium hover:text-red-400 transition-colors flex items-center gap-1"
-                >
-                  <LogOut size={16} />
-                  Sign Out
-                </button>
-              </div>
+                <UserButton />
+              </>
             ) : (
               <>
-                <Link href="/auth/login" className="text-sm font-medium hover:text-[#c4a962] transition-colors">
-                  Sign in
-                </Link>
-                <Link href="/auth/register" className="btn-white !text-sm !px-5 !py-2">
-                  Create Account
-                </Link>
+                <SignInButton mode="modal">
+                  <button className="text-sm font-medium hover:text-[#c4a962] transition-colors">
+                    Sign in
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button className="btn-white !text-sm !px-5 !py-2">
+                    Create Account
+                  </button>
+                </SignUpButton>
               </>
             )}
           </div><button
@@ -122,42 +113,37 @@ export default function Navbar() {
                   <Hotel size={20} className="text-zinc-400" />
                   Hotels
                 </Link>
+                <Link onClick={() => setMobileMenuOpen(false)} href="/destinations" className="flex items-center gap-3 text-lg font-medium text-zinc-700 hover:text-[#183e29]">
+                  <span className="w-5 flex justify-center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-400"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
+                  Destinations
+                </Link>
               </div>
 
               <div className="mt-auto p-6 border-t border-zinc-100 bg-zinc-50/50">
-                {user ? (
+                {isSignedIn ? (
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-full bg-[#183e29] text-white flex items-center justify-center font-bold">
-                        {user.name.charAt(0).toUpperCase()}
-                      </div>
+                      <UserButton />
                       <div>
-                        <p className="font-medium">{user.name}</p>
-                        <p className="text-xs text-zinc-500">{user.email}</p>
+                        <p className="font-medium">My Account</p>
                       </div>
                     </div>
                     <Link onClick={() => setMobileMenuOpen(false)} href="/dashboard" className="btn-secondary w-full">
                       Dashboard
                     </Link>
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="btn-ghost w-full justify-start text-red-600 hover:bg-red-50"
-                    >
-                      <LogOut size={18} />
-                      Sign Out
-                    </button>
                   </div>
                 ) : (
                   <div className="flex flex-col gap-3">
-                    <Link onClick={() => setMobileMenuOpen(false)} href="/auth/login" className="btn-secondary w-full text-center">
-                      Sign In
-                    </Link>
-                    <Link onClick={() => setMobileMenuOpen(false)} href="/auth/register" className="btn-primary w-full text-center">
-                      Create Account
-                    </Link>
+                    <SignInButton mode="modal">
+                      <button onClick={() => setMobileMenuOpen(false)} className="btn-secondary w-full text-center">
+                        Sign In
+                      </button>
+                    </SignInButton>
+                    <SignUpButton mode="modal">
+                      <button onClick={() => setMobileMenuOpen(false)} className="btn-primary w-full text-center">
+                        Create Account
+                      </button>
+                    </SignUpButton>
                   </div>
                 )}
               </div>

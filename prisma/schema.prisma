@@ -241,3 +241,23 @@ enum PaymentStatus {
   FAILED
   REFUNDED
 }
+
+model Destination {
+  id          String   @id @default(cuid())
+  name        String
+  country     String   @default("India")
+  description String
+  images      String[]
+  tags        String[]
+  bestMonths  Int[]    // 1-12 representing Jan-Dec
+  seasonType  String?
+  attractions String[]
+  weather     String?
+  peakSeason  String?
+  culture     String?
+  budget      String?  // Budget, Moderate, Luxury
+  climate     String?  // Tropical, Temperate, Arid, Continental, Polar, etc.
+  region      String?
+  createdAt   DateTime @default(now())
+}
+

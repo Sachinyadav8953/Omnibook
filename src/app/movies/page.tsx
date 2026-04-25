@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Clock, Filter, Ticket, X, TrendingUp, Clapperboard, CalendarDays, MapPin, ArrowUpDown } from "lucide-react";
+import { Star, Clock, Filter, Ticket, X, TrendingUp, Clapperboard, CalendarDays, MapPin, ArrowUpDown, Search } from "lucide-react";
 import { useLocationStore } from "@/store";
 import { MovieGridSkeleton } from "@/components/SkeletonLoaders";
 
@@ -68,13 +68,24 @@ export default function MoviesPage() {
   const [selectedLang, setSelectedLang] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const { city, setOpenPicker } = useLocationStore();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchQuery(searchInput);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   const fetchMovies = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      params.set("category", category);
+      if (searchQuery) params.set("query", searchQuery);
+      else params.set("category", category);
+      
       if (selectedGenre) params.set("genre", selectedGenre);
       if (selectedLang) params.set("language", selectedLang);
       if (sortBy) params.set("sort", sortBy);
@@ -87,7 +98,7 @@ export default function MoviesPage() {
     } finally {
       setLoading(false);
     }
-  }, [category, selectedGenre, selectedLang, sortBy]);
+  }, [category, selectedGenre, selectedLang, sortBy, searchQuery]);
 
   useEffect(() => {
     fetchMovies();
@@ -140,22 +151,50 @@ export default function MoviesPage() {
             </div>
           </motion.div>
         </div>
-      </section><div className="page-container pb-20"><div className="flex items-center gap-2 mb-6 overflow-x-auto pb-1">
-          {CATEGORY_TABS.map((tab) => (
+      </section>
+      
+      <div className="page-container pb-20">
+        <div className="relative mb-6">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Search size={18} className="text-zinc-400" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search movies by name..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="w-full pl-11 pr-4 py-3 bg-white border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#183e29] focus:border-transparent transition-all shadow-sm placeholder:text-zinc-400"
+          />
+          {searchInput && (
             <button
-              key={tab.value}
-              onClick={() => setCategory(tab.value)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-                category === tab.value
-                  ? "bg-[#183e29] text-white shadow-md"
-                  : "bg-white border border-zinc-200 text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
-              }`}
+              onClick={() => setSearchInput("")}
+              className="absolute inset-y-0 right-0 pr-4 flex items-center text-zinc-400 hover:text-zinc-600"
             >
-              {tab.icon}
-              {tab.label}
+              <X size={16} />
             </button>
-          ))}
-        </div><div className="flex items-center justify-between mb-8">
+          )}
+        </div>
+
+        {!searchQuery && (
+          <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-1">
+            {CATEGORY_TABS.map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setCategory(tab.value)}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
+                  category === tab.value
+                    ? "bg-[#183e29] text-white shadow-md"
+                    : "bg-white border border-zinc-200 text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
+                }`}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        )}
+        
+        <div className="flex items-center justify-between mb-8">
           <p className="text-sm text-zinc-500 font-sans">
             {loading ? "Loading movies..." : `${movies.length} movie${movies.length !== 1 ? "s" : ""} found`}
           </p>

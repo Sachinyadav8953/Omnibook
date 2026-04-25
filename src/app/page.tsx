@@ -132,7 +132,7 @@ export default function Home() {
           </motion.div>
 
           <motion.div variants={fadeUp} custom={3}>
-            <Link href="/search" className="group block md:hidden lg:block">
+            <Link href="/destinations" className="group block md:hidden lg:block">
               <div className="relative h-80 rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[var(--primary)]/20 transition-all duration-500">
                 <img
                   src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800"
