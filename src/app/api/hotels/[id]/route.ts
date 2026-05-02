@@ -12,7 +12,7 @@ export async function GET(
     const checkIn = searchParams.get("checkIn");
     const checkOut = searchParams.get("checkOut");
 
-    // Handle Live RapidAPI Hotels seamlessly
+
     if (id.startsWith("rapid-")) {
       const rapidId = id.replace("rapid-", "");
       
@@ -78,12 +78,12 @@ export async function GET(
           reviewCount: detailsData?.review_nr || 120,
           city: { name: city, state: state },
           roomTypes: dummyRoomTypes,
-          reviews: [] // Booking API reviews need another endpoint, so we use empty for now
+          reviews: []
         }
       });
     }
 
-    // Original Local Database Logic
+
     const hotel = await prisma.hotel.findUnique({
       where: { id },
       include: {

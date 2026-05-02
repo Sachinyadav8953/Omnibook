@@ -108,12 +108,12 @@ async function main() {
         },
       });
 
-      // Around 4-5 theatres per city to reach ~150 total
+
       const theatreCount = 4 + Math.floor(Math.random() * 2); 
       for (let i = 0; i < theatreCount; i++) {
         const theatreName = `${THEATRE_NAMES[Math.floor(Math.random() * THEATRE_NAMES.length)]} ${THEATRE_SUFFIXES[Math.floor(Math.random() * THEATRE_SUFFIXES.length)]} ${i + 1}`;
         
-        // Random lat/long (rough India bounds for demo)
+
         const lat = 10 + Math.random() * 25;
         const lng = 68 + Math.random() * 25;
 
@@ -128,7 +128,7 @@ async function main() {
           },
         });
 
-        // Add Screens and Seats (simplified for bulk)
+
         const screen = await prisma.screen.create({
           data: {
             name: "Screen 1",
@@ -156,10 +156,10 @@ async function main() {
         }
         await prisma.seat.createMany({ data: seatData });
 
-        // Add some showtimes for the movies
+
         for (const movie of movies) {
           const startTime = new Date();
-          startTime.setHours(10 + i * 2, 0, 0, 0); // Spaced out times
+          startTime.setHours(10 + i * 2, 0, 0, 0);
           const endTime = new Date(startTime);
           endTime.setMinutes(endTime.getMinutes() + movie.duration);
 
@@ -175,11 +175,11 @@ async function main() {
             },
           });
 
-          // Randomly mark some seats as booked
+
           const screenSeats = await prisma.seat.findMany({ where: { screenId: screen.id } });
           const bookedSeatData = screenSeats
             .sort(() => 0.5 - Math.random())
-            .slice(0, 15) // mark 15 random seats as booked
+            .slice(0, 15)
             .map(seat => ({
               showtimeId: showtime.id,
               seatId: seat.id,

@@ -26,13 +26,13 @@ const generateDestinations = async () => {
   const res = await fetch("https://restcountries.com/v3.1/all?fields=name,capital,region");
   const countries = await res.json();
 
-  // Filter out those without capitals
+
   let validCountries = countries.filter((c: any) => c.capital && c.capital.length > 0 && c.region);
 
-  // Shuffle randomly
+
   validCountries = validCountries.sort(() => 0.5 - Math.random());
 
-  // We need 15 per season (4 seasons * 15 = 60 destinations)
+
   const requiredCount = 60;
   const selectedCountries = validCountries.slice(0, requiredCount);
 
@@ -52,14 +52,14 @@ const generateDestinations = async () => {
     const country = c.name.common;
     const region = c.region;
 
-    // Assign season evenly
+
     const season = seasons[Math.floor(i / 15)];
     const bestMonths = bestMonthsMap[season];
 
     console.log(`Fetching wiki data for ${city}, ${country} (${i + 1}/${requiredCount})...`);
     const wikiData = await fetchWikipediaData(city);
 
-    // Delay to not hammer wikipedia
+
     await new Promise(r => setTimeout(r, 200));
 
     destinations.push({

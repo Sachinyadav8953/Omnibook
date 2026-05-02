@@ -46,7 +46,7 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
-  // Step 1: Try to get user location
+
   useEffect(() => {
     if (!("geolocation" in navigator)) {
       setLocationStatus("unavailable");
@@ -94,19 +94,31 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
       setSelectedSeats([...selectedSeats, seatId]);
     }
   };
-
+  let total = 0;
   const handleBook = async () => {
     if (selectedSeats.length === 0 || !selectedShowtime) return;
     setBookingLoading(true);
 
     try {
-      // Call the booking API to mark seats as booked
+
+      total = 0;
+      selectedSeats.forEach((id: string) => {
+        const seat = selectedShowtime.screen.seats.find((s: any) => s.id === id);
+        if (seat) {
+          if (seat.type === "VIP") total += selectedShowtime.vipPrice;
+          else if (seat.type === "PREMIUM") total += selectedShowtime.premiumPrice;
+          else total += selectedShowtime.basePrice;
+        }
+      });
+
+
       const bookRes = await fetch("/api/bookings/cinema", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           showtimeId: selectedShowtime.id,
           seatIds: selectedSeats,
+          totalAmount: total,
         }),
       });
 
@@ -118,12 +130,12 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
         return;
       }
 
-      // Build cart item
+
       const seatDetails = selectedSeats
         .map((id: any) => selectedShowtime.screen.seats.find((s: any) => s.id === id)!)
         .filter(Boolean);
 
-      let total = 0;
+      total = 0;
       const cartSeats = seatDetails.map((seat: any) => {
         let price = selectedShowtime.basePrice;
         if (seat.type === "PREMIUM") price = selectedShowtime.premiumPrice;
@@ -145,10 +157,15 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
         totalAmount: total,
       });
 
-      // Show success state briefly, then update seat statuses in local state
+
+      const { setBookingId, setLockedUntil } = useCartStore.getState();
+      setBookingId(bookData.booking.id);
+      setLockedUntil(bookData.lockedUntil);
+
+
       setBookingSuccess(true);
 
-      // Update local showtime data to mark seats as booked
+
       setShowtimes(prev => prev.map((st: any) => {
         if (st.id === selectedShowtime.id) {
           return {
@@ -167,14 +184,15 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
       setTimeout(() => {
         setBookingSuccess(false);
         setBookingLoading(false);
-      }, 2000);
+        router.push(`/checkout/${bookData.booking.id}`);
+      }, 1000);
     } catch {
       alert("Something went wrong. Please try again.");
       setBookingLoading(false);
     }
   };
 
-  // ---------- Render ----------
+
 
   if (loading) {
     return (
@@ -229,11 +247,10 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
             <button
               key={date}
               onClick={() => { setSelectedDate(date); setSelectedShowtimeId(""); setSelectedSeats([]); }}
-              className={`flex-shrink-0 flex flex-col items-center justify-center w-16 h-[72px] rounded-2xl border transition-all ${
-                isSelected
-                  ? "bg-[#183e29] border-[#183e29] text-white shadow-md shadow-[#183e29]/20"
-                  : "bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300"
-              }`}
+              className={`flex-shrink-0 flex flex-col items-center justify-center w-16 h-[72px] rounded-2xl border transition-all ${isSelected
+                ? "bg-[#183e29] border-[#183e29] text-white shadow-md shadow-[#183e29]/20"
+                : "bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300"
+                }`}
             >
               <span className={`text-[10px] uppercase font-bold tracking-wider ${isSelected ? "text-white/70" : "text-zinc-400"}`}>
                 {format(d, 'MMM')}
@@ -336,16 +353,16 @@ export default function BookingSection({ movieId, movieTitle, posterUrl }: { mov
                         const isUnavailable = statusObj && (statusObj.status === "BOOKED" || statusObj.status === "LOCKED");
                         const isSelected = selectedSeats.includes(seat.id);
 
-                        // GREEN for available, RED for booked
+
                         let seatClasses = "";
 
                         if (isSelected) {
                           seatClasses = "bg-[#183e29] border-[#183e29] text-white shadow-lg shadow-[#183e29]/30 scale-110 ring-2 ring-[#183e29]/20";
                         } else if (isUnavailable) {
-                          // RED — booked seats
+
                           seatClasses = "bg-red-100 border-red-300 text-red-400 cursor-not-allowed";
                         } else {
-                          // GREEN — available seats (different shades for types)
+
                           if (seat.type === "VIP") {
                             seatClasses = "bg-emerald-100 border-emerald-400 text-emerald-700 hover:bg-emerald-200 hover:border-emerald-500 hover:shadow-md";
                           } else if (seat.type === "PREMIUM") {

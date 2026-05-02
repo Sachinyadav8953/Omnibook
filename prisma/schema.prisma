@@ -249,14 +249,14 @@ model Destination {
   description String
   images      String[]
   tags        String[]
-  bestMonths  Int[]    // 1-12 representing Jan-Dec
+  bestMonths  Int[]
   seasonType  String?
   attractions String[]
   weather     String?
   peakSeason  String?
   culture     String?
-  budget      String?  // Budget, Moderate, Luxury
-  climate     String?  // Tropical, Temperate, Arid, Continental, Polar, etc.
+  budget      String?
+  climate     String?
   region      String?
   createdAt   DateTime @default(now())
 }

@@ -73,19 +73,24 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
     setError("");
 
     try {
-      const res = await fetch(`/api/bookings/${id}/confirm`, {
+      const res = await fetch("/api/checkout", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookingId: id }),
       });
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error);
+        setError(data.error || "Payment failed to initialize");
         if (res.status === 410) setStatus("expired");
         return;
       }
 
-      setStatus("confirmed");
-      clearCart();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError("Failed to initialize payment gateway");
+      }
     } catch {
       setError("Payment failed. Please try again.");
     } finally {

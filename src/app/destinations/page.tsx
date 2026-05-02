@@ -41,7 +41,7 @@ export default function DestinationsPage() {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All");
   
-  // Search State
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResult, setSearchResult] = useState<{
@@ -49,8 +49,8 @@ export default function DestinationsPage() {
     suggestions: any[];
   } | null>(null);
 
-  // Seasonal Logic
-  const currentMonthIndex = new Date().getMonth() + 1; // 1-12
+
+  const currentMonthIndex = new Date().getMonth() + 1;
   const currentMonthName = MONTHS[currentMonthIndex - 1];
 
   const fetchDestinations = useCallback(async () => {
@@ -111,7 +111,7 @@ export default function DestinationsPage() {
     setSearchResult(null);
   };
 
-  // Recommended destinations for current month
+
   const recommendedDestinations = destinations.filter((d: any) => d.bestMonths.includes(currentMonthIndex));
   const otherDestinations = destinations.filter((d: any) => !d.bestMonths.includes(currentMonthIndex));
 

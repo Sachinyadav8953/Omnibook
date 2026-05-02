@@ -37,16 +37,16 @@ export async function GET(req: NextRequest) {
       console.warn("DB connection failed or empty, falling back to live API fetch:", dbError);
     }
 
-    // Fallback: Fetch from online APIs (no local data)
+
     try {
       const restRes = await fetch("https://restcountries.com/v3.1/all?fields=name,capital,region");
       const countries = await restRes.json();
 
       let validCountries = countries.filter((c: any) => c.capital && c.capital.length > 0 && c.region);
-      // Seed with pseudo-randomness based on date to keep it somewhat stable per day or random
+
       validCountries = validCountries.sort(() => 0.5 - Math.random());
 
-      // Select 60 countries (15 per season)
+
       const selected = validCountries.slice(0, 60);
 
       const seasons = ["Spring", "Summer", "Autumn", "Winter"];
@@ -74,7 +74,8 @@ export async function GET(req: NextRequest) {
             imageUrl = wikiData.originalimage?.source || wikiData.thumbnail?.source || imageUrl;
           }
         } catch (e) {
-          // ignore
+
+
         }
 
         return {

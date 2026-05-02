@@ -12,7 +12,7 @@ export async function GET(
     const userLat = parseFloat(searchParams.get("lat") || "");
     const userLng = parseFloat(searchParams.get("lng") || "");
 
-    // Generate showtimes from in-memory cinema database (no DB needed)
+
     const showtimes = generateShowtimes(
       id,
       !isNaN(userLat) ? userLat : undefined,

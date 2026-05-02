@@ -131,6 +131,9 @@ export default function HotelDetailPage({ params }: { params: Promise<{ id: stri
           checkOut,
           rooms,
           guests,
+          hotelName: hotel!.name,
+          roomTypeName: selectedRoom.name,
+          pricePerNight: selectedRoom.pricePerNight,
         }),
       });
 
