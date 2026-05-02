@@ -85,18 +85,18 @@ export default function DashboardPage() {
     filter === "all"
       ? bookings
       : filter === "movies"
-      ? bookings.filter((b: any) => b.type === "MOVIE")
+      ? bookings.filter((b: Booking) => b.type === "MOVIE")
       : filter === "hotels"
-      ? bookings.filter((b: any) => b.type === "HOTEL")
-      : bookings.filter((b: any) => b.status === filter.toUpperCase());
+      ? bookings.filter((b: Booking) => b.type === "HOTEL")
+      : bookings.filter((b: Booking) => b.status === filter.toUpperCase());
 
   const stats = {
     total: bookings.length,
-    confirmed: bookings.filter((b: any) => b.status === "CONFIRMED").length,
-    pending: bookings.filter((b: any) => b.status === "PENDING").length,
+    confirmed: bookings.filter((b: Booking) => b.status === "CONFIRMED").length,
+    pending: bookings.filter((b: Booking) => b.status === "PENDING").length,
     totalSpent: bookings
-      .filter((b: any) => b.status === "CONFIRMED")
-      .reduce((sum: number, b: any) => sum + b.totalAmount, 0),
+      .filter((b: Booking) => b.status === "CONFIRMED")
+      .reduce((sum: number, b: Booking) => sum + b.totalAmount, 0),
   };
 
   const handleCancel = async (bookingId: string) => {
@@ -104,7 +104,7 @@ export default function DashboardPage() {
       const res = await fetch(`/api/bookings/${bookingId}/cancel`, { method: "POST" });
       if (res.ok) {
         setBookings((prev) =>
-          prev.map((b: any) => (b.id === bookingId ? { ...b, status: "CANCELLED" } : b))
+          prev.map((b: Booking) => (b.id === bookingId ? { ...b, status: "CANCELLED" } : b))
         );
       }
     } catch {
@@ -174,7 +174,7 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold text-[#183e29]">{formatCurrency(stats.totalSpent)}</p>
           </div>
         </div><div className="flex flex-wrap gap-2 mb-6">
-          {["all", "movies", "hotels", "confirmed", "pending", "cancelled"].map((f: any) => (
+          {["all", "movies", "hotels", "confirmed", "pending", "cancelled"].map((f: string) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
@@ -200,7 +200,7 @@ export default function DashboardPage() {
           </div>
         ) : (
           <motion.div className="space-y-3" initial="hidden" animate="visible">
-            {filtered.map((booking: any, i: any) => (
+            {filtered.map((booking: Booking, i: number) => (
               <motion.div key={booking.id} variants={fadeUp} custom={i} className="card p-5 hover:shadow-lg transition-shadow">
                 <div className="flex items-start gap-4"><div
                     className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${
