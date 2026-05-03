@@ -3,15 +3,20 @@ import { prisma } from "@/lib/prisma";
 import Stripe from "stripe";
 import { sendBookingConfirmationEmail } from "@/lib/email";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2025-02-24.acacia" as any,
-});
-
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
 export async function POST(req: NextRequest) {
   const payload = await req.text();
   const sig = req.headers.get("stripe-signature");
+
+  const stripeKey = process.env.STRIPE_SECRET_KEY;
+  if (!stripeKey) {
+    return NextResponse.json({ error: "Stripe secret key not configured" }, { status: 500 });
+  }
+
+  const stripe = new Stripe(stripeKey, {
+    apiVersion: "2025-02-24.acacia" as any,
+  });
+
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   let event;
 
@@ -19,7 +24,6 @@ export async function POST(req: NextRequest) {
     if (endpointSecret && sig) {
       event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
     } else {
-
       event = JSON.parse(payload);
     }
   } catch (err: any) {
